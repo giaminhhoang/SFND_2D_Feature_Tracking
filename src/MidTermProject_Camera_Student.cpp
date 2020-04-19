@@ -102,8 +102,20 @@ int main(int argc, const char *argv[])
         bool bFocusOnVehicle = true;
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
-        {
-            // ...
+        {   
+            
+            for (auto it = keypoints.begin(); it!= keypoints.end(); it++)
+            {   
+                float p_x = (*it).pt.x; 
+                float p_y = (*it).pt.y; 
+                if ((p_x < vehicleRect.x) || (p_x > vehicleRect.x + vehicleRect.width) ||
+                    (p_y < vehicleRect.y) || (p_y > vehicleRect.y + vehicleRect.height))
+                {
+                    keypoints.erase(it);
+                    it--;       // decreasing iterator afer earsing
+                } 
+            }
+            
         }
 
         //// EOF STUDENT ASSIGNMENT
@@ -150,7 +162,7 @@ int main(int argc, const char *argv[])
             vector<cv::DMatch> matches;
             string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
             string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
-            string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
+            string selectorType = "SEL_KNN";       // SEL_NN, SEL_KNN
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.5 -> add FLANN matching in file matching2D.cpp
